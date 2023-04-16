@@ -7,9 +7,9 @@ import re
 import sys
 import http.cookiejar as cookielib
 import mechanize
+from pathlib import Path
 
-
-def main(username, password):
+def main(username, password, dldir):
     url_login = 'http://www.flightmemory.com/'
 
     # open a browser
@@ -42,7 +42,10 @@ def main(username, password):
     dbpos = 50
     page = 1
     while True:
-        with open("flightmemory{}.html".format(page), 'wb') as f:
+        str_path = dldir + f"flightmemory{page}.html"
+        fpath = Path(str_path)
+
+        with open(fpath, 'wb') as f:
             f.write(br.response().read())
         page += 1
 
@@ -75,10 +78,10 @@ def main(username, password):
         # next 50 flights
         dbpos += 50
 
-
 parser = argparse.ArgumentParser()
 parser.add_argument("--username", help = "your flightmemory.com username", required=True)
 parser.add_argument("--password", help = "your flightmemory.com password", required=True)
+parser.add_argument("--dldir", help = "directory to save html files to e.g. ./data/", required=True)
 args = parser.parse_args()
 
-main(args.username, args.password)
+main(args.username, args.password, args.dldir)

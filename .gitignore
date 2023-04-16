@@ -1,4 +1,5 @@
 # Package specific
+data/
 *.html
 .DS_Store
 
